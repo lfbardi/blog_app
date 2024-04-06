@@ -49,7 +49,7 @@ class _SignInPageState extends State<SignInPage> {
                 controller: passwordController,
               ),
               const SizedBox(height: 20),
-              const AuthGradientButton(text: 'Sign In'),
+              AuthGradientButton(text: 'Sign In', onPressed: () {}),
               const SizedBox(height: 20),
               GestureDetector(
                 onTap: () {
