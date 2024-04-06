@@ -5,8 +5,9 @@ class AuthGradientButton extends StatelessWidget {
   const AuthGradientButton({
     super.key,
     required this.text,
+    required this.onPressed,
   });
-
+  final VoidCallback onPressed;
   final String text;
 
   @override
@@ -29,7 +30,7 @@ class AuthGradientButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(7),
           ),
         ),
-        onPressed: () {},
+        onPressed: onPressed,
         child: Text(
           text,
           style: const TextStyle(
