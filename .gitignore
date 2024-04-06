@@ -1,3 +1,5 @@
+.env
+
 # Miscellaneous
 *.class
 *.log
@@ -43,4 +45,4 @@ app.*.map.json
 /android/app/release
 
 # Secrets
-./lib/core/secrets/*.dart
+**/lib/core/secrets
