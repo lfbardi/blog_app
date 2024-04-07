@@ -1,5 +1,6 @@
 import 'package:blog_app/core/secrets/app_secrets.dart';
 import 'package:blog_app/features/auth/domain/repository/auth_repository.dart';
+import 'package:blog_app/features/auth/domain/usecases/user_sign_in.dart';
 import 'package:get_it/get_it.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -30,7 +31,10 @@ void _initAuth() {
   serviceLocator.registerLazySingleton<UserSignUp>(
     () => UserSignUp(serviceLocator()),
   );
+  serviceLocator.registerLazySingleton<UserSignIn>(
+    () => UserSignIn(serviceLocator()),
+  );
   serviceLocator.registerLazySingleton<AuthBloc>(
-    () => AuthBloc(userSignUp: serviceLocator()),
+    () => AuthBloc(userSignUp: serviceLocator(), userSignIn: serviceLocator()),
   );
 }
