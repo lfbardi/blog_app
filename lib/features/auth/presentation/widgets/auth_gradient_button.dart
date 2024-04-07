@@ -1,3 +1,4 @@
+import 'package:blog_app/core/common/widgets/loader.dart';
 import 'package:blog_app/core/theme/app_pallete.dart';
 import 'package:flutter/material.dart';
 
@@ -6,9 +7,11 @@ class AuthGradientButton extends StatelessWidget {
     super.key,
     required this.text,
     required this.onPressed,
+    required this.isLoading,
   });
   final VoidCallback onPressed;
   final String text;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -31,13 +34,15 @@ class AuthGradientButton extends StatelessWidget {
           ),
         ),
         onPressed: onPressed,
-        child: Text(
-          text,
-          style: const TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        child: isLoading
+            ? const Loader()
+            : Text(
+                text,
+                style: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
       ),
     );
   }

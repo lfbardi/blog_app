@@ -34,32 +34,32 @@ class _SignInPageState extends State<SignInPage> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(15),
-        child: BlocConsumer<AuthBloc, AuthState>(
-          listener: (context, state) {
-            if (state is AuthFailure) {
-              showSnackBar(context, state.message);
-            }
-          },
-          builder: (context, state) {
-            return Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    'Sign In.',
-                    style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 30),
-                  AuthField(hintText: 'Email', controller: emailController),
-                  const SizedBox(height: 15),
-                  AuthField(
-                    hintText: 'Password',
-                    isObscure: true,
-                    controller: passwordController,
-                  ),
-                  const SizedBox(height: 20),
-                  AuthGradientButton(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'Sign In.',
+                style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 30),
+              AuthField(hintText: 'Email', controller: emailController),
+              const SizedBox(height: 15),
+              AuthField(
+                hintText: 'Password',
+                isObscure: true,
+                controller: passwordController,
+              ),
+              const SizedBox(height: 20),
+              BlocConsumer<AuthBloc, AuthState>(
+                listener: (context, state) {
+                  if (state is AuthFailure) {
+                    showSnackBar(context, state.message);
+                  }
+                },
+                builder: (context, state) {
+                  return AuthGradientButton(
                     text: 'Sign In',
                     isLoading: state is AuthLoading,
                     onPressed: () {
@@ -72,38 +72,36 @@ class _SignInPageState extends State<SignInPage> {
                             );
                       }
                     },
-                  ),
-                  const SizedBox(height: 20),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        SignUpPage.route(),
-                      );
-                    },
-                    child: RichText(
-                      text: TextSpan(
-                        text: 'Don\' have an account? ',
-                        style: Theme.of(context).textTheme.titleMedium,
-                        children: [
-                          TextSpan(
-                            text: 'Sign Up',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(
+                  );
+                },
+              ),
+              const SizedBox(height: 20),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    SignUpPage.route(),
+                  );
+                },
+                child: RichText(
+                  text: TextSpan(
+                    text: 'Don\' have an account? ',
+                    style: Theme.of(context).textTheme.titleMedium,
+                    children: [
+                      TextSpan(
+                        text: 'Sign Up',
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
                                   color: AppPallete.gradient2,
                                   fontWeight: FontWeight.bold,
                                 ),
-                          ),
-                        ],
                       ),
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            );
-          },
+            ],
+          ),
         ),
       ),
     );

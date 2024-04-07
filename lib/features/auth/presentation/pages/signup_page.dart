@@ -3,6 +3,7 @@ import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/utils/show_snackbar.dart';
 import '../widgets/auth_field.dart';
 import '../widgets/auth_gradient_button.dart';
 
@@ -55,18 +56,28 @@ class _SignUpPageState extends State<SignUpPage> {
                 controller: passwordController,
               ),
               const SizedBox(height: 20),
-              AuthGradientButton(
-                text: 'Sign Up',
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    context.read<AuthBloc>().add(
-                          AuthSignUp(
-                            name: nameController.text.trim(),
-                            email: emailController.text.trim(),
-                            password: passwordController.text.trim(),
-                          ),
-                        );
+              BlocConsumer<AuthBloc, AuthState>(
+                listener: (context, state) {
+                  if (state is AuthFailure) {
+                    showSnackBar(context, state.message);
                   }
+                },
+                builder: (context, state) {
+                  return AuthGradientButton(
+                    text: 'Sign Up',
+                    isLoading: state is AuthLoading,
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        context.read<AuthBloc>().add(
+                              AuthSignUp(
+                                name: nameController.text.trim(),
+                                email: emailController.text.trim(),
+                                password: passwordController.text.trim(),
+                              ),
+                            );
+                      }
+                    },
+                  );
                 },
               ),
               const SizedBox(height: 20),
