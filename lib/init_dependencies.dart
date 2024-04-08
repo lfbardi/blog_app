@@ -3,6 +3,7 @@ import 'package:blog_app/core/network/connection_checker.dart';
 import 'package:blog_app/core/secrets/app_secrets.dart';
 import 'package:blog_app/features/auth/domain/repository/auth_repository.dart';
 import 'package:blog_app/features/auth/domain/usecases/user_sign_in.dart';
+import 'package:blog_app/features/blog/data/datasources/blog_local_data_source.dart';
 import 'package:blog_app/features/blog/data/datasources/blog_remote_data_source.dart';
 import 'package:blog_app/features/blog/data/repositories/blog_repositoy_impl.dart';
 import 'package:blog_app/features/blog/domain/repositories/blog_repository_dart.dart';
@@ -10,6 +11,7 @@ import 'package:blog_app/features/blog/domain/usecases/get_all_blogs.dart';
 import 'package:blog_app/features/blog/domain/usecases/upload_blog.dart';
 import 'package:blog_app/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -22,19 +24,31 @@ import 'features/auth/presentation/bloc/auth_bloc.dart';
 final serviceLocator = GetIt.instance;
 
 Future<void> initDependencies() async {
-  _initAuth();
-  _initBlog();
   final supabase = await Supabase.initialize(
     url: AppSecrets.supabaseURL,
     anonKey: AppSecrets.supabaseApiKey,
   );
 
+  await _initBlogHive();
+
   serviceLocator.registerLazySingleton(() => supabase.client);
+
+  _initAuth();
+  _initBlog();
 
   //core
   serviceLocator.registerLazySingleton<AppUserCubit>(() => AppUserCubit());
   serviceLocator.registerLazySingleton<ConnectionChecker>(
     () => ConnectionCheckerImpl(InternetConnection()),
+  );
+}
+
+Future<void> _initBlogHive() async {
+  await Hive.initFlutter();
+  final blogsBox = await Hive.openBox('blogs');
+
+  serviceLocator.registerLazySingleton<Box<dynamic>>(
+    () => blogsBox,
   );
 }
 
@@ -70,8 +84,15 @@ void _initBlog() {
     ..registerLazySingleton<BlogRemoteDataSource>(
       () => BlogRemoteDataSourceImpl(serviceLocator()),
     )
+    ..registerLazySingleton<BlogLocalDataSource>(
+      () => BlogLocalDataSourceImpl(serviceLocator()),
+    )
     ..registerLazySingleton<BlogRepository>(
-      () => BlogRepositoryImpl(serviceLocator()),
+      () => BlogRepositoryImpl(
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+      ),
     )
     ..registerLazySingleton<UploadBlog>(
       () => UploadBlog(serviceLocator()),
