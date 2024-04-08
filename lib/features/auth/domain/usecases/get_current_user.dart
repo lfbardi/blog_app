@@ -5,7 +5,7 @@ import 'package:fpdart/fpdart.dart';
 
 import '../../../../core/common/entities/user.dart';
 
-class GetCurrentUser implements UserCase<User, NoParams> {
+class GetCurrentUser implements UseCase<User, NoParams> {
   final AuthRepository authRepository;
 
   GetCurrentUser(this.authRepository);

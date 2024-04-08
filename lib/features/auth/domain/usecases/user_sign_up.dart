@@ -5,7 +5,7 @@ import 'package:fpdart/fpdart.dart';
 
 import '../../../../core/common/entities/user.dart';
 
-class UserSignUp implements UserCase<User, UserSignUpParams> {
+class UserSignUp implements UseCase<User, UserSignUpParams> {
   final AuthRepository authRepository;
   const UserSignUp(this.authRepository);
 

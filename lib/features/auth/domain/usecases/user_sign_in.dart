@@ -5,7 +5,7 @@ import 'package:fpdart/fpdart.dart';
 
 import '../../../../core/error/failures.dart';
 
-class UserSignIn implements UserCase<User, UserSignInParams> {
+class UserSignIn implements UseCase<User, UserSignInParams> {
   final AuthRepository authRepository;
 
   const UserSignIn(this.authRepository);
