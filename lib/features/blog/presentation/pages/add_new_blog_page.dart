@@ -10,6 +10,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/constants/constants.dart';
 import '../widgets/blog_editor.dart';
 import 'blog_page.dart';
 
@@ -147,12 +148,7 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    children: [
-                      'Technology',
-                      'Business',
-                      'Programming',
-                      'Entertainment',
-                    ]
+                    children: kTopics
                         .map((e) => Padding(
                               padding: const EdgeInsets.all(5),
                               child: GestureDetector(
